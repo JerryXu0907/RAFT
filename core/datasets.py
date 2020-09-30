@@ -117,6 +117,22 @@ class MpiSintel(FlowDataset):
             if split != 'test':
                 self.flow_list += sorted(glob(osp.join(flow_root, scene, '*.flo')))
 
+class CaterDataset(FlowDataset):
+    def __init__(self, aug_params=None, split='train', root='/cephfs/zhengjiexu/datasets/CATER/'):
+        super(CaterDataset, self).__init__(aug_params)
+
+        scene_root = osp.join(root, split)
+
+        if split == 'test':
+            self.is_test = True
+        
+        for scene in os.listdir(scene_root):
+            image_list = sorted(glob(osp.join(scene_root, scene, "image/*.png")))
+            for i in range(len(image_list) - 1):
+                self.image_list += [[image_list[i], image_list[i + 1]]]
+            if split != "test":
+                self.flow_list += sorted(glob(osp.join(scene_root, scene, "optical_flow/*.flo")))
+
 
 class FlyingChairs(FlowDataset):
     def __init__(self, aug_params=None, split='train', root='datasets/FlyingChairs_release/data'):
@@ -132,6 +148,8 @@ class FlyingChairs(FlowDataset):
             if (split=='training' and xid==1) or (split=='validation' and xid==2):
                 self.flow_list += [ flows[i] ]
                 self.image_list += [ [images[2*i], images[2*i+1]] ]
+
+
 
 
 class FlyingThings3D(FlowDataset):

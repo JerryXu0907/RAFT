@@ -91,6 +91,33 @@ def validate_chairs(model, iters=24):
     print("Validation Chairs EPE: %f" % epe)
     return {'chairs': epe}
 
+@torch.no_grad()
+def validate_cater(model, iters=24):
+    """ Perform evaluation on the FlyingChairs (test) split """
+    model.eval()
+    epe_list = []
+
+    val_dataset = datasets.CaterDataset(split='val')
+    for val_id in range(len(val_dataset)):
+        image1, image2, flow_gt, _ = val_dataset[val_id]
+        image1 = image1[None].cuda()
+        image2 = image2[None].cuda()
+
+        _, flow_pr = model(image1, image2, iters=iters, test_mode=True)
+        epe = torch.sum((flow_pr[0].cpu() - flow_gt)**2, dim=0).sqrt()
+        epe_list.append(epe.view(-1).numpy())
+
+
+    epe_all = np.concatenate(epe_list)
+    epe = np.mean(epe_all)
+    px1 = np.mean(epe_all<1)
+    px3 = np.mean(epe_all<3)
+    px5 = np.mean(epe_all<5)
+
+    print("Validation EPE: %f, 1px: %f, 3px: %f, 5px: %f" % (epe, px1, px3, px5))
+
+    return {"cater": epe_all}
+
 
 @torch.no_grad()
 def validate_sintel(model, iters=32):

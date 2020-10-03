@@ -156,14 +156,12 @@ def train(args):
 
     VAL_FREQ = 5000
     add_noise = True
-
     should_keep_training = True
     while should_keep_training:
 
         for i_batch, data_blob in enumerate(train_loader):
             optimizer.zero_grad()
             image1, image2, flow, valid = [x.cuda() for x in data_blob]
-
             if args.add_noise:
                 stdv = np.random.uniform(0.0, 5.0)
                 image1 = (image1 + stdv * torch.randn(*image1.shape).cuda()).clamp(0.0, 255.0)
@@ -218,17 +216,17 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--name', default='raft', help="name your experiment")
-    parser.add_argument('--stage', help="determines which dataset to use for training") 
+    parser.add_argument('--name', default='cater', help="name your experiment")
+    parser.add_argument('--stage', default='cater', help="determines which dataset to use for training") 
     parser.add_argument('--restore_ckpt', help="restore checkpoint")
     parser.add_argument('--small', action='store_true', help='use small model')
-    parser.add_argument('--validation', type=str, nargs='+')
+    parser.add_argument('--validation', default=['cater'], type=str, nargs='+')
 
     parser.add_argument('--lr', type=float, default=0.00002)
     parser.add_argument('--num_steps', type=int, default=100000)
     parser.add_argument('--batch_size', type=int, default=6)
-    parser.add_argument('--image_size', type=int, nargs='+', default=[384, 512])
-    parser.add_argument('--gpus', type=int, nargs='+', default=[0,1])
+    parser.add_argument('--image_size', type=int, nargs='+', default=[240, 320])
+    parser.add_argument('--gpus', type=int, nargs='+', default=[0])
     parser.add_argument('--mixed_precision', action='store_true', help='use mixed precision')
 
     parser.add_argument('--iters', type=int, default=12)

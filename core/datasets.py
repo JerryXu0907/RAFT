@@ -118,7 +118,8 @@ class MpiSintel(FlowDataset):
                 self.flow_list += sorted(glob(osp.join(flow_root, scene, '*.flo')))
 
 class CaterDataset(FlowDataset):
-    def __init__(self, aug_params=None, split='train', root='/cephfs/zhengjiexu/datasets/CATER/'):
+    def __init__(self, aug_params=None, split='train', root = '/cephfs/zhengjiexu/datasets/CATER'):
+    #root='/home/jerryxu/Desktop/datasets/CATER/'):
         super(CaterDataset, self).__init__(aug_params)
 
         scene_root = osp.join(root, split)

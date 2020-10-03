@@ -194,6 +194,8 @@ def train(args):
                         results.update(evaluate.validate_sintel(model.module))
                     elif val_dataset == 'kitti':
                         results.update(evaluate.validate_kitti(model.module))
+                    elif val_dataset == 'cater':
+                        results.update(evaluate.validate_cater(model.module))
 
                 logger.write_dict(results)
                 

@@ -245,7 +245,7 @@ def fetch_dataloader(args, TRAIN_DS='C+T+K+S+H'):
         aug_params = {'crop_size': args.image_size, 'min_scale': -0.2, 'max_scale': 0.4, 'do_flip': False}
         train_dataset = KITTI(aug_params, split='training')
     
-    elif args.stage = "cater":
+    elif args.stage == "cater":
         aug_params = {'crop_size': args.image_size, "min_scale": -0.1, 'max_scale': 1.0, 'do_flip': True}
         train_dataset = CaterDataset(aug_params)
 
